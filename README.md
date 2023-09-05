@@ -49,7 +49,7 @@ data_cont = reader.ReadNexFileVariables(r"C:\path\to\mydata.nex5", contNames)
 
 Retrieving information fromm `FileData` object is similar to retrieving values using `nex` package. The difference is that `nex` package requires `NeuroExplorer` to be installed and running, while `nex5file` package if pure Python.
 
-The syntax for accessing data is similar to `nex` package syntax with many method names are the same as in `nex`.
+The syntax for accessing data is similar to `nex` package syntax. Many method names in `nex5file` package are the same as in `nex` package.
 
 Here is a script to get continuous channels information using `nex`:
 
