@@ -21,13 +21,15 @@ class NexFileVarType:
 
 def MaxOfNumpyArrayOrZero(x):
     """
-    Compute the maximum value in a NumPy array or return 0 if the array is empty.
+    Compute the maximum value in a numpy array or return 0 if the array is empty.
 
     Parameters:
         x : array_like Input array. An array or array-like object containing numeric elements.
 
     Returns:
         float : The maximum value in the input array if it is not empty, or 0 if the array is empty.
+
+    :meta private:
     """
 
     if len(x) == 0:
@@ -46,6 +48,8 @@ def NumpyArraysEqual(a, b) -> bool:
 
     Returns:
         bool : True if numpy arrays equal.
+
+    :meta private:
     """
     return a.shape == b.shape and (a == b).all()
 
@@ -67,21 +71,159 @@ class Variable:
         """
         Get the metadata associated with the variable.
 
-        Returns
-        -------
-        dict
-            A dictionary containing metadata about the variable, including its name.
+        Returns:
+            dict : A dictionary containing metadata about the variable (name, wire number for neurons etc.).
+
         """
         return self.metadata
 
-    def MaximumTimestamp(self) -> float:
+    def _MaximumTimestamp(self) -> float:
         """
         Get the maximum timestamp in seconds.
 
         Returns:
             float : The maximum timestamp.
+
+        :meta private:
+
         """
-        return 0
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
+
+    def Weights(self) -> list:
+        """
+        Get a copy of the population vector weights.
+
+        Returns:
+            List[float] :A copy of the weights as a numpy array.
+
+        :meta private:
+        """
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
+
+    def Timestamps(self) -> list:
+        """
+        Get a copy of the timestamps in seconds.
+
+        Returns:
+            numpy array of type np.float64 : A copy of the timestamps (in seconds) as a numpy array.
+
+        :meta private:
+        """
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
+
+    def Intervals(self) -> list:
+        """
+        Get a list of intervals represented as two lists:
+            the first list is a list of interval starts
+            the second list is a list of interval ends
+
+        Returns:
+            List[List[float]] : a list of intervals represented as two lists. The first list is a list of interval starts.
+                The second list is a list of interval ends.
+
+
+        :meta private:
+        """
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
+
+    def MarkerFieldNames(self) -> list:
+        """
+        Get a copy of the marker field names.
+
+        Returns:
+            List[str] : A copy of the marker field names.
+
+        :meta private:
+        """
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
+
+    def Markers(self) -> list:
+        """
+        Get a copy of the marker fields.
+
+        Returns:
+            List[List[str]] : A copy of the marker fields.
+
+        :meta private:
+        """
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
+
+    def SamplingRate(self) -> float:
+        """
+        Get the sampling rate of the waveform.
+
+        Returns:
+            float : The sampling rate.
+
+        :meta private:
+        """
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
+
+    def NumPointsInWave(self) -> int:
+        """
+        Get the number of points in the waveform.
+
+        Returns:
+            int : The number of points in the waveform.
+
+        :meta private:
+        """
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
+
+    def WaveformValues(self) -> list:
+        """
+        Get a copy of the waveform values.
+
+        Returns:
+            numpy array of type np.float32 : A copy of the waveform values as a numpy array.
+
+        :meta private:
+        """
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
+
+    def PreThresholdTime(self) -> float:
+        """
+        Get the pre-threshold time.
+
+        Returns:
+            float : The pre-threshold time.
+
+        :meta private:
+        """
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
+
+    def ContinuousValues(self) -> list:
+        """
+        Get a copy of the continuous values in millivolts.
+
+        Returns:
+            numpy array of type np.float64 : A copy of the continuous values as a numpy array.
+
+        :meta private:
+        """
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
+
+    def FragmentTimestamps(self) -> list:
+        """
+        Get a copy of the fragment timestamps in seconds.
+
+        Returns:
+            numpy array of type np.float64 : A copy of the fragment timestamps as a numpy array.
+
+        :meta private:
+        """
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
+
+    def FragmentCounts(self) -> list:
+        """
+        Get a copy of the fragment counts.
+
+        Returns:
+            numpy array of type np.int64 : A copy of the fragment counts as a numpy array.
+
+        :meta private:
+        """
+        raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
 
 
 class PopulationVector(Variable):
@@ -103,7 +245,7 @@ class PopulationVector(Variable):
         Get a copy of the population vector weights.
 
         Returns:
-            List[float] :A copy of the weights as a NumPy array.
+            List[float] :A copy of the weights as a numpy array.
         """
         return np.copy(self.weights)
 
@@ -145,11 +287,11 @@ class EventVariable(Variable):
         Get a copy of the timestamps in seconds.
 
         Returns:
-            numpy array of type np.float64 : A copy of the timestamps (in seconds) as a NumPy array.
+            numpy array of type np.float64 : A copy of the timestamps (in seconds) as a numpy array.
         """
         return np.copy(self.timestamps)
 
-    def MaximumTimestamp(self) -> float:
+    def _MaximumTimestamp(self) -> float:
         """
         Get the maximum timestamp value in seconds.
 
@@ -228,7 +370,7 @@ class NeuronVariable(EventVariable):
 
 class IntervalVariable(Variable):
     """
-    Represents an interval variable  (a variable name and interval start and end times).
+    Represents an interval variable (a variable name and interval start and end times).
     """
 
     def __init__(self, varHeader: VariableHeader = VariableHeader()):
@@ -248,35 +390,32 @@ class IntervalVariable(Variable):
 
     def Intervals(self) -> list:
         """
-        Get a list of intervals represented as two lists:
-            the first list is a list of interval starts
-            the second list is a list of interval ends
+        Get a list of intervals represented as two lists -- the first list is a list of interval starts, the second list is a list of interval ends.
 
         Returns:
-            List[List[float]] : a list of intervals represented as two lists. The first list is a list of interval starts
-                The second list is a list of interval ends.
+            list : a list of intervals represented as two lists -- the first list is a list of interval starts, the second list is a list of interval ends.
         """
         return [self.interval_starts.tolist(), self.interval_ends.tolist()]
 
-    def MaximumTimestamp(self) -> float:
+    def _MaximumTimestamp(self) -> float:
         """
         Get the maximum timestamp among the end times of the intervals.
 
-        Returns
+        Returns:
             float : The maximum timestamp among the end times or 0 if there are no intervals.
         """
         return MaxOfNumpyArrayOrZero(self.interval_ends)
 
-    def CountForHeader(self) -> int:
+    def _CountForHeader(self) -> int:
         """
         Get the count of intervals for header information.
 
-        Returns
+        Returns:
             int : The count of intervals.
         """
         return len(self.interval_starts)
 
-    def BytesInData(self) -> int:
+    def _BytesInData(self) -> int:
         """
         Get the total number of bytes used to store the intervals data.
 
@@ -306,6 +445,42 @@ class MarkerVariable(Variable):
             and self.marker_field_names == other.marker_field_names
             and self.marker_fields == other.marker_fields
         )
+
+    def Timestamps(self) -> list:
+        """
+        Get a copy of the timestamps associated with the markers.
+
+        Returns:
+            numpy array of type np.float64 : A copy of the timestamps as a numpy array.
+        """
+        return np.copy(self.timestamps)
+
+    def MarkerFieldNames(self) -> list:
+        """
+        Get a copy of the marker field names.
+
+        Returns:
+            List[str] : A copy of the marker field names.
+        """
+        return self.marker_field_names.copy()
+
+    def Markers(self) -> list:
+        """
+        Get a copy of the marker fields.
+
+        Returns:
+            List[List[str]] : A copy of the marker fields.
+        """
+        return self.marker_fields.copy()
+
+    def _MaximumTimestamp(self) -> float:
+        """
+        Get the maximum timestamp.
+
+        Returns:
+            float : The maximum timestamp.
+        """
+        return MaxOfNumpyArrayOrZero(self.timestamps)
 
     def _CountForHeader(self) -> int:
         """
@@ -351,42 +526,6 @@ class MarkerVariable(Variable):
             for i in range(len(self.marker_fields)):
                 self.marker_fields[i] = [int(m) for m in self.marker_fields[i]]
 
-    def Timestamps(self) -> list:
-        """
-        Get a copy of the timestamps associated with the markers.
-
-        Returns:
-            numpy array of type np.float64 : A copy of the timestamps as a NumPy array.
-        """
-        return np.copy(self.timestamps)
-
-    def MarkerFieldNames(self) -> list:
-        """
-        Get a copy of the marker field names.
-
-        Returns:
-            List[str] : A copy of the marker field names.
-        """
-        return self.marker_field_names.copy()
-
-    def Markers(self) -> list:
-        """
-        Get a copy of the marker fields.
-
-        Returns:
-            List[List[str]] : A copy of the marker fields.
-        """
-        return self.marker_fields.copy()
-
-    def MaximumTimestamp(self) -> float:
-        """
-        Get the maximum timestamp.
-
-        Returns:
-            float : The maximum timestamp.
-        """
-        return MaxOfNumpyArrayOrZero(self.timestamps)
-
     def _CalcMarkerLength(self) -> None:
         """
         Calculate the maximum marker length and set data type.
@@ -426,6 +565,62 @@ class WaveformVariable(Variable):
             and NumpyArraysEqual(self.waveform_values, other.waveform_values)
         )
 
+    def SamplingRate(self) -> float:
+        """
+        Get the sampling rate of the waveform.
+
+        Returns:
+            float : The sampling rate.
+        """
+        return self.header.SamplingRate
+
+    def NumPointsInWave(self) -> int:
+        """
+        Get the number of points in the waveform.
+
+        Returns:
+            int : The number of points in the waveform.
+        """
+        return self.header.NPointsWave
+
+    def Timestamps(self) -> list:
+        """
+        Get a copy of the timestamps.
+
+        Returns:
+            numpy array of type np.float64 : A copy of the timestamps as a numpy array.
+        """
+        return np.copy(self.timestamps)
+
+    def WaveformValues(self) -> list:
+        """
+        Get a copy of the waveform values.
+
+        Returns:
+            numpy array of type np.float32 : A copy of the waveform values as a numpy array.
+        """
+        return np.copy(self.waveform_values)
+
+    def PreThresholdTime(self) -> float:
+        """
+        Get the pre-threshold time.
+
+        Returns:
+            float : The pre-threshold time.
+        """
+        return self.header.PreThrTime
+
+    def _MaximumTimestamp(self) -> float:
+        """
+        Get the maximum timestamp of all data points in the variable.
+
+        Returns:
+            float : The maximum timestamp or 0 if there are no timestamps.
+        """
+        if len(self.timestamps) == 0:
+            return 0
+        return MaxOfNumpyArrayOrZero(self.timestamps) + (self.header.NPointsWave - 1) / self.header.SamplingRate
+
     def _AssignNumPointsWave(self):
         """
         Assign the number of points in the waveform from the waveform values matrix.
@@ -446,62 +641,6 @@ class WaveformVariable(Variable):
         """
         b = self.waveform_values.view(np.uint8)
         self.hashed_wave_values = hashlib.sha1(b).hexdigest()
-
-    def SamplingRate(self) -> float:
-        """
-        Get the sampling rate of the waveform.
-
-        Returns:
-            float : The sampling rate.
-        """
-        return self.header.SamplingRate
-
-    def NumPointsInWave(self) -> int:
-        """
-        Get the number of points in the waveform.
-
-        Returns:
-            int : The number of points in the waveform.
-        """
-        return self.header.NPointsWave
-
-    def PreThresholdTime(self) -> float:
-        """
-        Get the pre-threshold time.
-
-        Returns:
-            float : The pre-threshold time.
-        """
-        return self.header.PreThrTime
-
-    def Timestamps(self) -> list:
-        """
-        Get a copy of the timestamps.
-
-        Returns:
-            numpy array of type np.float64 : A copy of the timestamps as a NumPy array.
-        """
-        return np.copy(self.timestamps)
-
-    def WaveformValues(self) -> list:
-        """
-        Get a copy of the waveform values.
-
-        Returns:
-            numpy array of type np.float32 : A copy of the waveform values as a NumPy array.
-        """
-        return np.copy(self.waveform_values)
-
-    def MaximumTimestamp(self) -> float:
-        """
-        Get the maximum timestamp of all data points in the variable.
-
-        Returns:
-            float : The maximum timestamp or 0 if there are no timestamps.
-        """
-        if len(self.timestamps) == 0:
-            return 0
-        return MaxOfNumpyArrayOrZero(self.timestamps) + (self.header.NPointsWave - 1) / self.header.SamplingRate
 
     def _ContScaling(self, contDataType: int) -> Tuple[float, float]:
         """
@@ -554,7 +693,7 @@ class WaveformVariable(Variable):
 class ContinuousVariable(Variable):
     """
     Represents a continuous variable. The variable contains continuous values and their timestamps.
-    The timestamps are represented as fragment timestamps and fragment counts.
+
     """
 
     def __init__(self, varHeader: VariableHeader = VariableHeader()):
@@ -575,6 +714,42 @@ class ContinuousVariable(Variable):
             and NumpyArraysEqual(self.fragment_counts, other.fragment_counts)
             and NumpyArraysEqual(self.continuous_values.astype(np.float32), other.continuous_values.astype(np.float32))
         )
+
+    def SamplingRate(self) -> float:
+        """
+        Get the sampling rate of the continuous data.
+
+        Returns:
+            float : The sampling rate.
+        """
+        return self.header.SamplingRate
+
+    def ContinuousValues(self) -> list:
+        """
+        Get a copy of the continuous values in millivolts.
+
+        Returns:
+            numpy array of type np.float64 : A copy of the continuous values as a numpy array.
+        """
+        return np.copy(self.continuous_values)
+
+    def FragmentTimestamps(self) -> list:
+        """
+        Get a copy of the fragment timestamps in seconds.
+
+        Returns:
+            numpy array of type np.float64 : A copy of the fragment timestamps as a numpy array.
+        """
+        return np.copy(self.fragment_timestamps)
+
+    def FragmentCounts(self) -> list:
+        """
+        Get a copy of the fragment counts.
+
+        Returns:
+            numpy array of type np.int64 : A copy of the fragment counts as a numpy array.
+        """
+        return np.copy(self.fragment_counts)
 
     def _HashContValues(self) -> None:
         """
@@ -635,43 +810,7 @@ class ContinuousVariable(Variable):
             fragmentCounts.append(count)
         self.fragment_counts = np.array(fragmentCounts).astype(np.int64)
 
-    def SamplingRate(self) -> float:
-        """
-        Get the sampling rate of the continuous data.
-
-        Returns:
-            float : The sampling rate.
-        """
-        return self.header.SamplingRate
-
-    def ContinuousValues(self) -> list:
-        """
-        Get a copy of the continuous values in milliVolts.
-
-        Returns:
-            numpy array of type np.float64 : A copy of the continuous values as a NumPy array.
-        """
-        return np.copy(self.continuous_values)
-
-    def FragmentTimestamps(self) -> list:
-        """
-        Get a copy of the fragment timestamps in seconds.
-
-        Returns:
-            numpy array of type np.float64 : A copy of the fragment timestamps as a NumPy array.
-        """
-        return np.copy(self.fragment_timestamps)
-
-    def FragmentCounts(self) -> list:
-        """
-        Get a copy of the fragment counts.
-
-        Returns:
-            numpy array of type np.int64 : A copy of the fragment counts as a NumPy array.
-        """
-        return np.copy(self.fragment_counts)
-
-    def MaximumTimestamp(self) -> float:
+    def _MaximumTimestamp(self) -> float:
         """
         Get the maximum timestamp of all the values.
 

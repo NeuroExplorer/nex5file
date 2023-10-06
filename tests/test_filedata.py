@@ -113,7 +113,7 @@ def test_maximum_timestamp(sample_file_data):
     neuron_var2.timestamps = np.array([4.0, 5.0, 6.0])
 
     sample_file_data.variables.extend([neuron_var1, neuron_var2])
-    assert sample_file_data.MaximumTimestamp() == 6.0
+    assert sample_file_data._MaximumTimestamp() == 6.0
 
 
 def test_add_event(sample_file_data):

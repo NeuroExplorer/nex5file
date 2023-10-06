@@ -7,6 +7,8 @@ from struct import unpack, calcsize, pack
 class DataFormat:
     """
     Constants and utility functions for various binary data types.
+
+    :meta private:
     """
 
     INT16 = 0
@@ -389,7 +391,7 @@ class VariableHeader:
         Get continuous data parameters.
 
         Returns:
-            tuple : A tuple containing continuous data format, raw to MV conversion factor, and offset in MV.
+            tuple : A tuple containing continuous data format, raw to millivolts conversion factor, and offset in millivolts.
         """
         rawToMv = self.ADtoMV
         offset = self.MVOffset

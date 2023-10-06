@@ -20,13 +20,15 @@ class FileData:
     FileData: Class for Managing Data in .nex and .nex5 Data Files.
 
     Parameters:
-        timestamp_frequencyHz (float): The timestamp frequency in Hertz. Defaults to 100,000 Hz.
+        timestamp_frequencyHz (float): The timestamp frequency in Hertz. Defaults to 100,000 Hertz.
 
     Raises:
         ValueError: If timestamp_frequencyHz is less than or equal to 0.
 
     Example:
-        ```python
+
+    ::
+
         from nex5file.filedata import FileData
 
         # Create a FileData instance with a custom timestamp frequency
@@ -40,7 +42,6 @@ class FileData:
 
         # Get the timestamp frequency
         timestamp_frequency = file_data.GetTimestampFrequency()
-        ```
     """
 
     def __init__(self, tsFrequency: float = 10000, comment: str = ""):
@@ -79,6 +80,7 @@ class FileData:
         Raises:
             ValueError: If theVar's type is negative or its name is empty or if a variable with the same name already exists in the FileData instance.
         """
+
         if theVar.header.Type < 0 or theVar.header.Name == "":
             raise ValueError(f"unable to add variable. Variable is invalid")
 
@@ -88,7 +90,7 @@ class FileData:
                     f'unable to add variable with name "{var.header.Name}". Variable with this name already exists'
                 )
         self.variables.append(theVar)
-        self.end_seconds = self.MaximumTimestamp()
+        self.end_seconds = self._MaximumTimestamp()
 
     def DeleteVariable(self, name: str) -> None:
         """
@@ -219,19 +221,19 @@ class FileData:
         """
         return self._VarNames(NexFileVarType.POPULATION_VECTOR)
 
-    def MaximumTimestamp(self) -> float:
+    def _MaximumTimestamp(self) -> float:
         """
         Get the maximum timestamp among all variables in the FileData instance.
 
         Returns:
-            float: The maximum timestamp found in the FileData instance.
+            float: The maximum timestamp found in the FileData instance (in seconds).
         """
         maxTs = 0
         for v in self.variables:
-            maxTs = max(maxTs, v.MaximumTimestamp())
+            maxTs = max(maxTs, v._MaximumTimestamp())
         return maxTs
 
-    def NumberOfBytesInData(self) -> int:
+    def _NumberOfBytesInData(self) -> int:
         """
         Get the total number of bytes required to save data of all variables.
 
@@ -252,9 +254,10 @@ class FileData:
             evTimestamps (List[float]): Event timestamps in seconds.
 
         Example:
-            ```python
+
+        ::
+
             file_data.AddEvent("EventVariable", [1.0, 2.0, 3.0])
-            ```
         """
         h = VariableHeader(Type=NexFileVarType.EVENT, Name=evName)
         ev = EventVariable(h)
@@ -282,9 +285,10 @@ class FileData:
             yPosition (float): The y-position in range [0,100]. Defaults to 0.
 
         Example:
-            ```python
+
+        ::
+           
             file_data.AddNeuron("NeuronVariable", [1.0, 2.0, 3.0])
-            ```
         """
         h = VariableHeader(
             Type=NexFileVarType.NEURON, Name=nrName, Wire=wire, Unit=unit, XPos=xPosition, YPos=yPosition
@@ -302,10 +306,11 @@ class FileData:
             intervalsAsPairs (list of tuples): List of interval start and end pairs in seconds.
 
         Example:
-            ```python
+
+        ::
+
             intervals = [(0.0, 1.0), (1.5, 2.0)]
             file_data.AddIntervalAsPairsStartEnd("IntervalVariable", intervals)
-            ```
         """
         h = VariableHeader(Type=NexFileVarType.INTERVAL, Name=intName)
         starts = []
@@ -333,11 +338,12 @@ class FileData:
                         if the length of any field does not match the length of timestamps.
 
         Example:
-            ```python
+
+        ::
+
             field_names = ["Field1", "Field2"]
             fields = [[1.0, 2.0], [3.0, 'abc']]
             file_data.AddMarker("MarkerVariable", [0.0, 1.0], field_names, fields)
-            ```
         """
         if not len(fieldNames) == len(fields):
             raise ValueError("invalid marker parameters")
@@ -359,14 +365,15 @@ class FileData:
 
         Parameters:
             contName (str): The name of the continuous variable.
-            samplingRate (float): The sampling rate of the continuous variable in Hz.
+            samplingRate (float): The sampling rate of the continuous variable in Hertz.
             startTimestamp (float): The timestamp at the start of the first fragment in seconds.
-            contValues (List[float]): The continuous values in milliVolts.
+            contValues (List[float]): The continuous values in millivolts.
 
         Example:
-            ```python
+
+        ::
+            
             file_data.AddContVarWithFloatsSingleFragment("ContVariable", 1000.0, 0.0, [1.0, 2.0, 3.0])
-            ```
         """
         if samplingRate < 0 or samplingRate > self.timestamp_frequencyHz:
             raise ValueError(
@@ -404,16 +411,17 @@ class FileData:
 
         Parameters:
             contName (str): The name of the continuous variable.
-            samplingRate (float): The sampling rate of the continuous variable in Hz.
+            samplingRate (float): The sampling rate of the continuous variable in Hertz.
             startTimestamp (float): The timestamp at the start of the first fragment in seconds.
             contValuesAsInt16 (numpy array of type np.int16): The continuous values as int16 values.
-            rawToMV (float): Conversion factor from AD units to milliVolts (MV).
-            rawOffset (float): Offset in MV.
+            rawToMV (float): Conversion factor from AD units to millivolts (millivolts).
+            rawOffset (float): Offset in millivolts.
 
         Example:
-            ```python
+
+        ::
+
             file_data.AddContSingleFragmentValuesInt16("ContVariable", 1000.0, 0.0, [100, 200, 300], 0.1, 0.0)
-            ```
         """
         if samplingRate < 0 or samplingRate > self.timestamp_frequencyHz:
             raise ValueError(
@@ -453,16 +461,17 @@ class FileData:
 
         Parameters:
             contName (str): The name of the continuous variable.
-            samplingRate (float): The sampling rate of the continuous variable in Hz.
+            samplingRate (float): The sampling rate of the continuous variable in Hertz.
             allTimestamps (numpy array of type np.float64): The timestamps for all data points in seconds.
-            contValues (numpy array of type np.float32): The continuous values in milliVolts.
+            contValues (numpy array of type np.float32): The continuous values in millivolts.
 
         Example:
-            ```python
+
+        ::
+
             timestamps = [0.0, 0.001, 0.002]
             values = [1.0, 2.0, 3.0]
             file_data.AddContVarWithFloatsAllTimestamps("ContVariable", 1000.0, timestamps, values)
-            ```
         """
         if samplingRate < 0 or samplingRate > self.timestamp_frequencyHz:
             raise ValueError(
@@ -497,21 +506,20 @@ class FileData:
 
         Parameters:
             waveName (str): The name of the waveform variable.
-            samplingRate (float): The sampling rate of the waveform variable in Hz.
+            samplingRate (float): The sampling rate of the waveform variable in Hertz.
             timestamps (numpy array of type np.float64): The timestamps in seconds.
-            waveValues (numpy array of type np.float32): The waveform values as a NumPy array. Each column represents a waveform.
+            waveValues (numpy array of type np.float32): The waveform values as a numpy array. Each column represents a waveform.
 
         Example:
-            ```python
+
+        ::
+
             wave_name = "WaveformVariable"
-            sampling_rate = 1000.0  # Hz
+            sampling_rate = 1000.0  # Hertz
             timestamps = [0.0, 1.0, 2.0]
             wave_values = [[2, 3, 4, 1], [5, 6, 7, 2]
 
             file_data.AddWaveVarWithFloats(wave_name, sampling_rate, timestamps, wave_values)
-            ```
-
-        This method adds a waveform variable to the data with the specified name, sampling rate, timestamps, and waveform values.
         """
         if samplingRate < 0 or samplingRate > self.timestamp_frequencyHz:
             raise ValueError(

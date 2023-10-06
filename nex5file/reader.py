@@ -24,8 +24,6 @@ import numpy as np
 
 class Reader:
     """
-    .nex and .nex5 reader class.
-
     This class provides functionality for reading both .nex and .nex5 files and extracting their data.
     """
 
@@ -55,15 +53,15 @@ class Reader:
             ValueError: If the file format is invalid.
 
         Example:
+
             Read only continuous channels from .nex file
 
-            ```python
-            reader = Reader()
-            data = reader.ReadNexHeadersOnly("example.nex")
-            contNames = data.ContinuousNames()
-            data_cont = reader.ReadNexFileVariables("example.nex", contNames)
-            ```
+        ::
 
+            reader = Reader()
+            data = reader.ReadNexHeadersOnly(r"C:\\path\\to\\your\\file.nex")
+            contNames = data.ContinuousNames()
+            data_cont = reader.ReadNexFileVariables(r"C:\\path\\to\\your\\file.nex", contNames)
         """
 
         extension = os.path.splitext(filePath)[1].lower()
@@ -97,13 +95,12 @@ class Reader:
         Example:
             Read only continuous channels from .nex file
 
-            ```python
-            reader = Reader()
-            data = reader.ReadNex5HeadersOnly("example.nex5")
-            contNames = data.ContinuousNames()
-            data_cont = reader.ReadNex5FileVariables("example.nex5", contNames)
-            ```
+        ::
 
+            reader = Reader()
+            data = reader.ReadNex5HeadersOnly(r"C:\\path\\to\\your\\file.nex5")
+            contNames = data.ContinuousNames()
+            data_cont = reader.ReadNex5FileVariables(r"C:\\path\\to\\your\\file.nex5", contNames)
         """
         extension = os.path.splitext(filePath)[1].lower()
         if extension == ".nex":
@@ -138,13 +135,12 @@ class Reader:
         Example:
             Read only continuous channels from .nex file
 
-            ```python
-            reader = Reader()
-            data = reader.ReadNexHeadersOnly("example.nex5")
-            contNames = data.ContinuousNames()
-            data_cont = reader.ReadNexFileVariables("example.nex5", contNames)
-            ```
+        ::
 
+            reader = Reader()
+            data = reader.ReadNexHeadersOnly(r"C:\\path\\to\\your\\file.nex")
+            contNames = data.ContinuousNames()
+            data_cont = reader.ReadNexFileVariables(r"C:\\path\\to\\your\\file.nex", contNames)
         """
 
         extension = os.path.splitext(filePath)[1].lower()
@@ -176,14 +172,14 @@ class Reader:
             ValueError: If the file format is invalid.
 
         Example:
-            ```python
+
+        ::
+
             # read only continuous channels from .nex file
             reader = Reader()
-            data = reader.ReadNex5HeadersOnly("example.nex5")
+            data = reader.ReadNex5HeadersOnly(r"C:\\path\\to\\your\\file.nex5")
             contNames = data.ContinuousNames()
-            data_cont = reader.ReadNex5FileVariables("example.nex5", contNames)
-            ```
-
+            data_cont = reader.ReadNex5FileVariables(r"C:\\path\\to\\your\\file.nex5", contNames)
         """
         extension = os.path.splitext(filePath)[1].lower()
         if extension == ".nex":
@@ -212,10 +208,10 @@ class Reader:
 
         Example:
 
-            ```python
+        ::
+
             reader = Reader()
-            data = reader.ReadNex5File("example.nex5")
-            ```
+            data = reader.ReadNex5File(r"C:\\path\\to\\your\\file.nex5")
         """
         extension = os.path.splitext(filePath)[1].lower()
         if extension == ".nex":
@@ -246,10 +242,10 @@ class Reader:
 
         Example:
 
-            ```python
+        ::
+
             reader = Reader()
-            data = reader.ReadNexFile("example.nex")
-            ```
+            data = reader.ReadNexFile(r"C:\\path\\to\\your\\file.nex")
         """
         extension = os.path.splitext(filePath)[1].lower()
         if extension == ".nex5":

@@ -17,7 +17,7 @@ pip install nex5file
 ```python
 from nex5file.reader import Reader
 from nex5file.filedata import FileData
-nexFilePath = r"C:\path\to\mydata.nex"
+nexFilePath = r"C:\path\to\your\file.nex"
 reader = Reader()
 data = reader.ReadNexFile(nexFilePath)
 ```
@@ -28,7 +28,7 @@ If you need to read only some channels from a .nex or .nex5 file, use `ReadNexFi
 # read only two continuous channels: cont1 and cont2
 from nex5file.reader import Reader
 from nex5file.filedata import FileData
-nexFilePath = r"C:\path\to\mydata.nex"
+nexFilePath = r"C:\path\to\your\file.nex"
 reader = Reader()
 data = reader.ReadNexFileVariables(nexFilePath, ['cont1', 'cont2'])
 ```
@@ -40,9 +40,9 @@ To retrieve channel names from a file, use `ReadNexHeadersOnly` method. Here is 
 from nex5file.reader import Reader
 from nex5file.filedata import FileData
 reader = Reader()
-data = reader.ReadNexHeadersOnly(r"C:\path\to\mydata.nex5")
+data = reader.ReadNexHeadersOnly(r"C:\path\to\your\file.nex")
 contNames = data.ContinuousNames()
-data_cont = reader.ReadNexFileVariables(r"C:\path\to\mydata.nex5", contNames)
+data_cont = reader.ReadNexFileVariables(r"C:\path\to\your\file.nex", contNames)
 ```
 
 ### Access Data in a FileData Object
@@ -71,7 +71,7 @@ from nex5file.filedata import FileData
 
 reader = Reader()
 data = reader.ReadNexFile(nexFilePath)
-# print continuous channel name, sampling rates and continuous values
+# print continuous channel names, sampling rates and continuous values
 for name in data.ContinuousNames():
     rate = data[name].SamplingRate()
     values = doc[name].ContinuousValues()
@@ -94,21 +94,25 @@ You can use the following `FileData` methods to modify data:
 
 ### Write .nex and .nex5 Files
 
-Use `WriteNexFile` method of `nex5file.writer.Writed` class
+Use `WriteNexFile` method of `nex5file.writer.Writer` class
 
 ```python
 from nex5file.writer import Writer
 from nex5file.filedata import FileData
+import numpy as np
 
 freq = 100000
 data = FileData(freq)
-eventTs = [1, 2, 3.5]
+
 eName = "event 001"
-neuronTs = [0.001, 2.54, 8.99]
-nName = "neuron 002"
+eventTs = [1, 2, 3.5]
 data.AddEvent(eName, np.array(eventTs))
 
-nexFilePath = r"C:\Data\example.nex"
+nName = "neuron 002"
+neuronTs = [0.001, 2.54, 8.99]
+data.AddNeuron(nName, np.array(neuronTs))
+
+nexFilePath = r"C:\path\to\your\file.nex"
 writer = Writer()
 writer.WriteNexFile(data, nexFilePath)
 ```

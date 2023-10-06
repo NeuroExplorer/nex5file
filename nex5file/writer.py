@@ -52,22 +52,23 @@ class Writer:
 
         Example:
             To write data to a .nex file:
-            ```python
+
+        ::
+
             writer = Writer()
-            writer.WriteNexFile(file_data, "path/to/your/file.nex")
-            ```
+            writer.WriteNexFile(file_data, r"C:\\path\\to\\your\\file.nex")
         """
         extension = os.path.splitext(filePath)[1].lower()
         if extension == ".nex5":
             self.WriteNex5File(data, filePath)
             return
 
-        if len(data.variables) > 0 and data.NumberOfBytesInData() == 0:
+        if len(data.variables) > 0 and data._NumberOfBytesInData() == 0:
             raise ValueError(
                 "unable to save FileData object if all variables have no data. NeuroExplorer will reject .nex file with no data."
             )
         self.timestamp_frequencyHz = data.timestamp_frequencyHz
-        maxTs = data.MaximumTimestamp()
+        maxTs = data._MaximumTimestamp()
         if round(maxTs * data.timestamp_frequencyHz) > pow(2, 31):
             raise ValueError(
                 "unable to save as .nex file: max timestamp exceeds 32-bit range; you can save as .nex5 file instead"
@@ -94,17 +95,18 @@ class Writer:
 
         Example:
             To write data to a .nex5 file:
-            ```python
+
+        ::
+
             writer = Writer()
-            writer.WriteNex5File(file_data, "path/to/your/file.nex5")
-            ```
+            writer.WriteNex5File(file_data, r"C:path\\to\\your\\file.nex5")
         """
         extension = os.path.splitext(filePath)[1].lower()
         if extension == ".nex":
             self.WriteNexFile(data, filePath)
             return
 
-        if len(data.variables) > 0 and data.NumberOfBytesInData() == 0:
+        if len(data.variables) > 0 and data._NumberOfBytesInData() == 0:
             raise ValueError(
                 "unable to save FileData object if all variables have no data. NeuroExplorer will reject .nex file with no data."
             )
@@ -171,7 +173,7 @@ class Writer:
         fh.Comment = data.comment
         fh.Frequency = data.timestamp_frequencyHz
         fh.NumVars = len(data.variables)
-        maxTs = data.MaximumTimestamp()
+        maxTs = data._MaximumTimestamp()
         maxTsTicks = int(round(maxTs * fh.Frequency))
         self.tsAs64 = 0
         if maxTsTicks > pow(2, 31):

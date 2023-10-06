@@ -1,0 +1,3 @@
+run this at root of Ztest
+
+sphinx-apidoc -o docs nex5file/
