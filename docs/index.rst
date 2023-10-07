@@ -10,18 +10,24 @@ Getting Started
 Install nex5file package
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use pip to install nex5file
-
+Run this command in Windows Command Prompt:
 
 .. code-block:: text
 
-   pip install -U nex5file
+   python.exe -m pip install -U nex5file
+
+If you get an error message ``pip: command not found``, run this command first to install pip:
+
+.. code-block:: text
+
+   python.exe -m ensurepip --upgrade
 
 
 Read .nex and .nex5 Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`ReadNexFile` method of `nex5file.reader.Reader` class reads and parses contents of a .nex or a .nex5 file and returns an instance of `nex5file.filedata.FileData` object. This method reads all the data in the file.
+``ReadNexFile`` method of ``nex5file.reader.Reader`` class reads and parses contents of a .nex or a .nex5 file 
+and returns an instance of ``nex5file.filedata.FileData`` object. This method reads all the data in the file.
 
 ::
 
@@ -32,7 +38,7 @@ Read .nex and .nex5 Files
    data = reader.ReadNexFile(nexFilePath)
 
 
-If you need to read only some channels from a .nex or .nex5 file, use `ReadNexFileVariables` method:
+If you need to read only some channels from a .nex or .nex5 file, use ``ReadNexFileVariables`` method:
 
 ::
 
@@ -44,7 +50,7 @@ If you need to read only some channels from a .nex or .nex5 file, use `ReadNexFi
    data = reader.ReadNexFileVariables(nexFilePath, ['cont1', 'cont2'])
 
 
-To retrieve channel names from a file, use `ReadNexHeadersOnly` method. Here is the code to read only continuous channels:
+To retrieve channel names from a file, use ``ReadNexHeadersOnly`` method. Here is the code to read only continuous channels:
 
 ::
 
@@ -60,11 +66,13 @@ To retrieve channel names from a file, use `ReadNexHeadersOnly` method. Here is 
 Access Data in a FileData Object
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Retrieving information fromm `FileData` object is similar to retrieving values using `nex` package. The difference is that `nex` package requires `NeuroExplorer` to be installed and running, while `nex5file` package is pure Python.
+Retrieving information from ``FileData`` object is similar to retrieving values using ``nex`` package. 
+The difference is that ``nex`` package requires NeuroExplorer to be installed and running, while ``nex5file`` package is pure Python.
 
-The syntax for accessing data is similar to `nex` package syntax. Many method names in `nex5file` package are the same as in `nex` package.
+The syntax for accessing data is similar to ``nex`` package syntax. Many method names in ``nex5file`` package 
+are the same as in ``nex`` package.
 
-Here is a script to get continuous channels information using `nex`:
+Here is a script to get continuous channels information using ``nex``:
 
 ::
 
@@ -78,7 +86,7 @@ Here is a script to get continuous channels information using `nex`:
       print(name, rate, values)
 
 
-Here is the same functionality using `nex5file` package:
+Here is the same functionality using ``nex5file`` package:
 
 ::
 
@@ -99,20 +107,20 @@ Modify Data in a FileData Object
 
 You can use the following `FileData` methods to modify data:
 
-- `DeleteVariable`
-- `AddEvent`
-- `AddNeuron`
-- `AddIntervalAsPairsStartEnd`
-- `AddMarker`
-- `AddContVarWithFloatsSingleFragment`
-- `AddContSingleFragmentValuesInt16`
-- `AddContVarWithFloatsAllTimestamps`
-- `AddWaveVarWithFloats`
+- ``DeleteVariable``
+- ``AddEvent``
+- ``AddNeuron``
+- ``AddIntervalAsPairsStartEnd``
+- ``AddMarker``
+- ``AddContVarWithFloatsSingleFragment``
+- ``AddContSingleFragmentValuesInt16``
+- ``AddContVarWithFloatsAllTimestamps``
+- ``AddWaveVarWithFloats``
 
 Write .nex and .nex5 Files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Use `WriteNexFile` method of `nex5file.writer.Writed` class
+Use ``WriteNexFile`` method of ``nex5file.writer.Writer`` class
 
 ::
 
@@ -136,19 +144,8 @@ Use `WriteNexFile` method of `nex5file.writer.Writed` class
    writer.WriteNexFile(data, nexFilePath)
 
 
-
-
-
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    modules
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

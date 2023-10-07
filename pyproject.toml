@@ -1,6 +1,6 @@
 [project]
 name = "nex5file"
-version = "0.1.1"
+version = "0.1.3"
 authors = [{ name="Alex Kirillov", email="alex@neuroexplorer.com" },]
 description = "Read and write .nex and .nex5 files and edit data stored in .nex and .nex5 files."
 keywords = ["NeuroExplorer", "nex", "nex5", ".nex", ".nex5"]
@@ -16,9 +16,10 @@ dependencies = ["numpy",]
 
 [project.urls]
 homepage = "https://github.com/NeuroExplorer/nex5file"
-documentation = "https://www.neuroexplorer.com/docs/reference/scripting/index.html"
+documentation = "https://www.neuroexplorer.com/nex5file/"
 repository = "https://github.com/NeuroExplorer/nex5file"
 
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+

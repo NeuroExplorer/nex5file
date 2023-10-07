@@ -3,11 +3,11 @@ Python package to read, write and edit data stored in NeuroExplorer .nex and .ne
 
 ## Getting Started
 
-### Install nex5file
+### Install nex5file package
 
-Use pip to install nex5file
+Run this command in Windows Command Prompt:
 ```
-pip install nex5file
+pip install -U nex5file
 ```
 
 ### Read .nex and .nex5 Files
@@ -116,3 +116,5 @@ nexFilePath = r"C:\path\to\your\file.nex"
 writer = Writer()
 writer.WriteNexFile(data, nexFilePath)
 ```
+
+See [www.neuroexplorer.com/nex5file/](https://www.neuroexplorer.com/nex5file/) for nex5file reference documentation.

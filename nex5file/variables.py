@@ -85,7 +85,6 @@ class Variable:
             float : The maximum timestamp.
 
         :meta private:
-
         """
         raise NotImplementedError("Wrong variable type. This method is not available for this instance of Variable.")
 
@@ -120,7 +119,6 @@ class Variable:
         Returns:
             List[List[float]] : a list of intervals represented as two lists. The first list is a list of interval starts.
                 The second list is a list of interval ends.
-
 
         :meta private:
         """
@@ -348,6 +346,15 @@ class NeuronVariable(EventVariable):
             and self.header.YPos == other.header.YPos
             and NumpyArraysEqual(self.timestamps, other.timestamps)
         )
+
+    def Timestamps(self) -> list:
+        """
+        Get a copy of the timestamps in seconds.
+
+        Returns:
+            numpy array of type np.float64 : A copy of the timestamps (in seconds) as a numpy array.
+        """
+        return np.copy(self.timestamps)
 
     def _AssignFromVarMeta(self) -> None:
         if "unitNumber" in self.metadata:
